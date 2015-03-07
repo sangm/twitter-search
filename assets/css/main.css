@@ -1,0 +1,16 @@
+html, body {
+    font-family: 'Roboto';
+    background: rgba(189, 195, 199,.2);
+}
+header {
+    background: white;
+}
+.container-fluid {
+    padding: 0;
+}
+hr {
+    height: 0;
+    clear: both;
+    border: solid #ddd;
+    border-width: 1px 0;
+}

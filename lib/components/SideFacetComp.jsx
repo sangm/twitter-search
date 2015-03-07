@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import {RaisedButton, LeftNav, MenuItem} from 'material-ui';
+import {FlatButton, LeftNav, MenuItem} from 'material-ui';
 
 export default React.createClass({
     getInitialState() {
@@ -27,7 +27,7 @@ export default React.createClass({
         ];
         return (
             <div>
-                <RaisedButton label="Toggle Docked Left Nav" onTouchTap={this._toggleDockedLeftNavClick} /><br/><br/>
+                <FlatButton label={this.props.label} onTouchTap={this._toggleDockedLeftNavClick} secondary={true} />
                 <LeftNav ref="dockedLeftNav" docked={this.state.isDocked} menuItems={menuItems} />
             </div>
         )

@@ -2,7 +2,6 @@
 
 import React from 'react'
 import {FlatButton, Paper, Tabs, Tab} from 'material-ui'
-import AppActions from '../AppActions.js'
 import ActionCreator from '../ActionCreators'
 import AppConstants from '../AppConstants'
 import TweetStore from '../stores/TweetStore'

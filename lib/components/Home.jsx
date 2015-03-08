@@ -5,8 +5,7 @@ import { RouteHandler } from 'react-router';
 import Header from './HeaderComp.jsx';
 import Stats from './StatsComp.jsx';
 import Searchbar from './SearchbarComp.jsx';
-import SideFacet from './SideFacetComp.jsx';
-import Footer from './FooterComp.jsx';
+import TweetBoxes from './TweetBoxesComp.jsx';
 
 export default React.createClass({
 
@@ -19,7 +18,7 @@ export default React.createClass({
                         <div className="col-md-offset-2 col-md-8 col-xs-12">
                             <Stats />
                             <Searchbar />
-                            <SideFacet />
+                            <TweetBoxes />
                         </div>
                     </div>
                 </div>

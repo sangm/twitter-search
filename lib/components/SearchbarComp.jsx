@@ -2,10 +2,15 @@
 
 import React from 'react'
 import {Paper} from 'material-ui'
+import AppConstants from '../AppConstants'
+import AppCreators from '../ActionCreators'
 
 export default React.createClass({
     handleChange(event) {
-        console.log(event);
+        if (event.target.value.length !== 0) {
+            AppCreators.fire(AppConstants.SEARCH_TWEETS, {query: event.target.value});
+        }
+        
     },
     handleSubmit(event) {
         event.preventDefault();

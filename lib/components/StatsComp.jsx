@@ -17,16 +17,19 @@ export default React.createClass({
         return this.getState();
     }, 
     componentDidMount() {
-        TweetStore.addChangeListener(this.onChange);
+        TweetStore.addChangeListener(this.fetchTweets);
     },
     componentWillUnmount() {
-        TweetStore.addChangeListener(this.onChange);
+        TweetStore.addChangeListener(this.fetchTweets);
     },
     onActive(tab) {
         ActionCreator.fire(tab.props.action, {});
     },
-    onChange() {
+    fetchTweets() {
         this.setState(this.getState());
+    },
+    tweetLabel() {
+        return "# of Tweets " + this.state.tweets.size;
     },
 
     render() {
@@ -40,13 +43,13 @@ export default React.createClass({
                          onActive={this.onActive}
                          action={AppConstants.GET_TWEETS} >
                         <ul className="list-inline text-center">
-                            <li><FlatButton label={"# of Tweets " + this.state.tweets.size} primary={true} /></li>
+                            <li><FlatButton label={this.tweetLabel()} primary={true} /></li>
                             <li><SideFacet label="Faceted Search" /></li>
                         </ul>
                     </Tab>
                     <Tab label="Word Frequency"
                          onActive={this.onActive}
-                         action={AppConstants.GET_TWEETS} ><p className="text-center" >{this.state.tweets.size}</p>
+                         action={AppConstants.GET_TWEETS} ><p className="text-center" >3</p>
                     </Tab>
                 </Tabs>
             </Paper>

@@ -10,7 +10,9 @@ export default React.createClass({
         if (event.target.value.length !== 0) {
             AppCreators.fire(AppConstants.SEARCH_TWEETS, {query: event.target.value});
         }
-        
+        else {
+            AppCreators.fire(AppConstants.GET_TWEETS);
+        }
     },
     handleSubmit(event) {
         event.preventDefault();

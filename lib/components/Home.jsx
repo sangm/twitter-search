@@ -15,7 +15,7 @@ export default React.createClass({
                 <Header/>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-md-offset-2 col-md-8 col-xs-12">
+                       <div className="col-md-offset-2 col-md-8 col-xs-12">
                             <Stats />
                             <Searchbar />
                             <TweetBoxes />

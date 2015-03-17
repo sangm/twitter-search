@@ -3,7 +3,7 @@
 import React from 'react'
 import AppConstants from '../AppConstants'
 import TweetStore from '../stores/TweetStore'
-import {Paper} from 'material-ui'
+import {Paper, FlatButton} from 'material-ui'
 
 let TweetBox = React.createClass({
     render() {
@@ -44,8 +44,15 @@ export default React.createClass({
         this.setState(this.getState());
     },
     getTweetBoxes() {
-        if (this.state.tweets.size === 0)
-            return "Loading Tweets";
+        if (this.state.tweets.size === 0) {
+            let paperStyle = {textAlign: 'center' }
+            return (
+                <Paper style={paperStyle} 
+                       className="middle" 
+                       zDepth={0}>
+                    <FlatButton label="No Tweets" />
+                </Paper>)
+        }
         else {
             return this.state.tweets
                        .toArray()

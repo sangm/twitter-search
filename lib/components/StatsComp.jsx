@@ -10,7 +10,10 @@ import WordFreqComp from './WordFreqComp.jsx'
 
 export default React.createClass({
     getState() {
-        return { tweets: TweetStore.getTweets() }
+        return { 
+            tweets: TweetStore.getTweets(),
+            facets: TweetStore.getFacets()
+        }
     },
     getInitialState() {
         ActionCreator.fire(AppConstants.GET_TWEETS, {});
@@ -43,7 +46,8 @@ export default React.createClass({
                          action={AppConstants.GET_TWEETS} >
                         <ul className="list-inline text-center">
                             <li><FlatButton label={this.tweetLabel()} primary={true} /></li>
-                            <li><SideFacet label="Faceted Search" /></li>
+                            <li><SideFacet label="Faceted Search" 
+                                           facets={this.state.facets}/></li>
                         </ul>
                     </Tab>
                     <Tab label="Word Frequency"

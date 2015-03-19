@@ -1,49 +1,12 @@
 'use strict';
 import React from 'react';
 import TweetStore from '../stores/TweetStore'
-import {FlatButton, LeftNav, MenuItem} from 'material-ui';
+import {FlatButton, LeftNav, MenuItem} from 'material-ui'
 import {TweetConstants} from '../stores/TweetResource'
-
-let TweetListenerFacetsMixin = {
-    getState() {
-        return { facets: TweetStore.getFacets() }
-    },
-    getInitialState() {
-        return this.getState();
-    },
-    componentDidMount() {
-        TweetStore.addChangeListener(this.loadTweets);
-    },
-    componentWillUnmount() {
-        TweetStore.removeChangeListener(this.loadTweets);
-    },
-    loadTweets() {
-        this.setState(this.getState());
-    }
-};
-
-let TweetListenerStatusMixin = {
-    getState() {
-        return { tweets: TweetStore.getTweets() }
-    },
-    getInitialState() {
-        return this.getState();
-    },
-    componentDidMount() {
-        TweetStore.addChangeListener(this.loadTweets);
-    },
-    componentWillUnmount() {
-        TweetStore.removeChangeListener(this.loadTweets);
-    },
-    loadTweets() {
-        this.setState(this.getState());
-    },
-};
-
+import AppCreators from '../ActionCreators'
+import AppConstants from '../AppConstants'
 
 export default React.createClass({
-    mixins: [TweetListenerFacetsMixin],
-
     getInitialState() {
         return { isDocked: false}
     },
@@ -54,32 +17,30 @@ export default React.createClass({
         });
     },
     onChange(event, selectedIndex, menuItem) {
-        console.log(event, selectedIndex, menuItem);
+        let query = menuItem.text.slice(1) // get rid of @
+        AppCreators.fire(AppConstants.SEARCH_TWEETS, {query: query});
+    },
+    getItems(label, facets) {
+        if (facets) {
+            let menuItems = [];
+            let header = { type: MenuItem.Types.NESTED, text: label, items: []}
+            header.items.push({type: MenuItem.Types.SUBHEADER, text: label})
+                for (let facet of facets.values()) {
+                    header.items.push({payload: facet.index, text: '@' + facet.term, number: String(facet.count)});
+                }
+            menuItems.push(header);
+            return menuItems;
+        }
+        return [];
     },
 
     render() {
-        let users = this.state.facets[TweetConstants.facets.user];
-        let words = this.state.facets[TweetConstants.facets.keyword];
-        let userItems = [];
-        let wordItems = [];
-       
-        if (users) {
-            let header = { type: MenuItem.Types.NESTED, text: "Top Tweeters", items: []}
-            header.items.push({type: MenuItem.Types.SUBHEADER, text: 'Top Tweeters'})
-            for (let user of users.values()) {
-                header.items.push({payload: user.index, text: '@' + user.term, number: String(user.count)});
-            }
-            userItems.push(header);
-        }
-        if (words) {
-            let header = { type: MenuItem.Types.NESTED, text: "Top Queries", items: []}
-            header.items.push({type: MenuItem.Types.SUBHEADER, text: 'Top Queries'})
-            for (let word of words.values()) {
-                header.items.push({payload: word.index, text: word.term, number: String(word.count)});
-            }
-            wordItems.push(header);
-        }
+        let users = this.props.facets[TweetConstants.facets.user];
+        let words = this.props.facets[TweetConstants.facets.keyword];
+        let userItems = this.getItems("Top Tweeters", users);
+        let wordItems = this.getItems("Top Queries", words);
         let menuItems = [...wordItems, ...userItems];
+        
         return (
             <div>
                 <FlatButton label={this.props.label} 

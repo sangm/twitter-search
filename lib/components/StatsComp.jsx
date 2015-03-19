@@ -6,6 +6,7 @@ import ActionCreator from '../ActionCreators'
 import AppConstants from '../AppConstants'
 import TweetStore from '../stores/TweetStore'
 import SideFacet from './SideFacetComp.jsx'
+import WordFreqComp from './WordFreqComp.jsx'
 
 export default React.createClass({
     getState() {
@@ -30,7 +31,6 @@ export default React.createClass({
     tweetLabel() {
         return "# of Tweets " + this.state.tweets.size;
     },
-
     render() {
         let paperStyle = { marginTop: '1em' };
         return (
@@ -48,7 +48,8 @@ export default React.createClass({
                     </Tab>
                     <Tab label="Word Frequency"
                          onActive={this.onActive}
-                         action={AppConstants.GET_TWEETS} ><p className="text-center" >3</p>
+                         action={AppConstants.GET_TWEETS} >
+                        <WordFreqComp tweets={this.state.tweets}/>
                     </Tab>
                 </Tabs>
             </Paper>

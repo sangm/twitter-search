@@ -20,13 +20,14 @@ export default React.createClass({
         let query = menuItem.text.slice(1) // get rid of @
         AppCreators.fire(AppConstants.SEARCH_TWEETS, {query: query});
     },
-    getItems(label, facets) {
+    getItems(label, facets, user) {
         if (facets) {
             let menuItems = [];
             let header = { type: MenuItem.Types.NESTED, text: label, items: []}
             header.items.push({type: MenuItem.Types.SUBHEADER, text: label})
                 for (let facet of facets.values()) {
-                    header.items.push({payload: facet.index, text: '@' + facet.term, number: String(facet.count)});
+                    let text = user ? '@' + facet.term : facet.term
+                    header.items.push({payload: facet.index, text: text, number: String(facet.count)});
                 }
             menuItems.push(header);
             return menuItems;
@@ -35,11 +36,15 @@ export default React.createClass({
     },
 
     render() {
-        let users = this.props.facets[TweetConstants.facets.user];
-        let words = this.props.facets[TweetConstants.facets.keyword];
-        let userItems = this.getItems("Top Tweeters", users);
-        let wordItems = this.getItems("Top Queries", words);
-        let menuItems = [...wordItems, ...userItems];
+        let facets = this.props.facets;
+        let menuItems = [];
+        if (facets.size !== 0) {
+            for (let [key, value] of facets.entries()) {
+                let user = (key === TweetConstants.facets.user)
+                let items = this.getItems(TweetConstants.label[key], value, user);
+                menuItems.push(...items);
+            }
+        }
         
         return (
             <div>

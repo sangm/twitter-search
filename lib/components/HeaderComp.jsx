@@ -10,11 +10,13 @@ export default React.createClass({
     render() {
         let twitterStyle = { color: '#3498db' };
         let headerStyle = { borderBottom: '1px solid #eee' };
+        let imageStyle = { width: '17%'}
         return (
             <div>
-                <header className="container-fluid text-center"
+                <header className="container-fluid"
                         style={headerStyle}>
-                    <i style={twitterStyle} className="fa fa-twitter fa-3x"></i>
+                    <img style={imageStyle}
+                         src={'/assets/images/EEA2.png'} />
                 </header>
             </div>
         );

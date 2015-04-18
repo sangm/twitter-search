@@ -58,6 +58,5 @@ export default React.createClass({
                 </Tabs>
             </Paper>
         )
-            
     }
 })

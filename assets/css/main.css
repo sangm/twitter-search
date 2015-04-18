@@ -1,6 +1,7 @@
 html, body {
     font-family: 'Roboto';
     background: rgba(189, 195, 199,.2);
+    height: 2000px; 
 }
 header {
     background: white;
@@ -16,4 +17,11 @@ hr {
 .middle {
     background: white;
     margin: auto;
+}
+.mui-text-field {
+    font-size: 1em;
+}
+
+#flight-list li {
+    background: 'black';
 }

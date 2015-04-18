@@ -31,7 +31,7 @@ export default React.createClass({
                         <input type="text" 
                                style={searchbarStyle} 
                                className="form-control" 
-                               placeholder="Search Twitter"
+                               placeholder="Search Twitter1"
                                onChange={this.handleChange} />
                     </div>
                 </form>

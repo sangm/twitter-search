@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import TweetStore from '../stores/TweetStore'
-import {FlatButton, LeftNav, MenuItem} from 'material-ui'
+import {FlatButton, LeftNav, MenuItem, RadioButton, RadioButtonGroup} from 'material-ui'
 import {TweetConstants} from '../stores/TweetResource'
 import AppCreators from '../ActionCreators'
 import AppConstants from '../AppConstants'
@@ -20,15 +20,26 @@ export default React.createClass({
         let query = menuItem.text.slice(1) // get rid of @
         AppCreators.fire(AppConstants.SEARCH_TWEETS, {query: query});
     },
-    getItems(label, facets, user) {
+    getItems(tweetConstant, facets) {
         if (facets) {
+            let label = tweetConstant.label;
             let menuItems = [];
+            
             let header = { type: MenuItem.Types.NESTED, text: label, items: []}
-            header.items.push({type: MenuItem.Types.SUBHEADER, text: label})
-                for (let facet of facets.values()) {
-                    let text = user ? '@' + facet.term : facet.term
-                    header.items.push({payload: facet.index, text: text, number: String(facet.count)});
+            let radio = <RadioButton
+                            value="light"
+                            label="prepare for light speed" />
+            header.items.push({type: MenuItem.Types.SUBHEADER, text: label});
+            for (let facet of facets.values()) {
+                let text = facet.term;
+                if (tweetConstant.key === TweetConstants.user.key) {
+                    text = '@' + facet.term;
                 }
+                else if (tweetConstant.key === TweetConstants.date.key) {
+                    console.log(facet.term);
+                }
+                header.items.push({payload: facet.index, text: text, number: String(facet.count)});
+            }
             menuItems.push(header);
             return menuItems;
         }
@@ -40,14 +51,13 @@ export default React.createClass({
         let menuItems = [];
         if (facets.size !== 0) {
             for (let [key, value] of facets.entries()) {
-                let user = (key === TweetConstants.facets.user)
-                let items = this.getItems(TweetConstants.label[key], value, user);
+                let items = this.getItems(TweetConstants[key], value);
                 menuItems.push(...items);
             }
         }
         
         return (
-            <div>
+           <div>
                 <FlatButton label={this.props.label} 
                             onTouchTap={this._toggleDockedLeftNavClick} 
                             secondary={true} />

@@ -198,6 +198,7 @@ var React = _interopRequire(require("react"));
 
 var _materialUi = require("material-ui");
 
+var Snackbar = _materialUi.Snackbar;
 var DatePicker = _materialUi.DatePicker;
 var TextField = _materialUi.TextField;
 var Paper = _materialUi.Paper;
@@ -214,7 +215,7 @@ module.exports = React.createClass({
     displayName: "FlightComp",
 
     getState: function getState() {
-        return { flights: TweetStore.getFlights() };
+        return { flights: TweetStore.getFlights(), selected: null, contact: false, submit: false };
     },
     getInitialState: function getInitialState() {
         return this.getState();
@@ -228,8 +229,37 @@ module.exports = React.createClass({
     loadFlights: function loadFlights() {
         this.setState(this.getState());
     },
+    handleItem: function handleItem(e) {
+        this.state.selected = e.target;
+        this.setState({ flights: false, contact: true });
+    },
+
+    getSubmission: function getSubmission() {
+        var _this = this;
+
+        if (!this.state.submit) {
+            return;
+        }var keys = Object.keys(this.refs);
+        var values = keys.map(function (key) {
+            console.log(_this.refs[key]);
+        });
+        return values;
+    },
+
+    getTextFields: function getTextFields(fields) {
+        if (!this.state.contact) {
+            return;
+        }
+        return fields.map(function (field) {
+            return React.createElement("li", null, React.createElement(TextField, {
+                ref: field,
+                floatingLabelText: field }));
+        });
+    },
 
     flightList: function flightList() {
+        var _this = this;
+
         if (!this.state.flights) {
             return;
         }
@@ -241,28 +271,42 @@ module.exports = React.createClass({
         var divStyle = { textAlign: "center" };
         var liStyle = { width: "90%", margin: ".5em" };
         var moneyStyle = { color: "green" };
+
         return this.state.flights.map(function (flight) {
-            return React.createElement("li", { style: liStyle }, React.createElement(Paper, {
-                className: "middle",
+            return React.createElement("li", { key: flight.number,
+                style: liStyle,
+                onClick: _this.handleItem,
+                value: flight.number }, React.createElement(Paper, { className: "middle",
                 zDepth: 0 }, React.createElement("div", { className: "row", style: divStyle }, React.createElement("div", { className: "col-md-3" }, React.createElement("h4", null, React.createElement("span", { className: "glyphicon glyphicon-plane" }), " ", flight.airlines, "#", flight.number)), React.createElement("div", { className: "col-md-4" }, React.createElement("h4", null, flight.depart, " - ", flight.arrive)), React.createElement("div", { className: "col-md-2" }, React.createElement("h4", null, flight.duration)), React.createElement("div", { className: "col-md-2" }, React.createElement("h4", { style: moneyStyle }, flight.price)))));
         });
     },
 
     handleClick: function handleClick() {
-
         AppCreators.fire(AppConstants.SEARCH);
+    },
+
+    submit: function submit() {
+        this.setState({ flights: false, submit: true });
     },
 
     render: function render() {
         var paperStyle = { background: "#4287f4" };
+        var marginTop = { marginTop: "5%" };
         var headerStyle = { color: "white" };
+        var ulStyle = { textAlign: "center" };
+        var cardStyle = { width: "50%" };
+        var textFields = ["Last Name", "First Name", "City", "State", "Zipcode", "Email", "Phone", "Credit Card Number"];
         return React.createElement("div", null, React.createElement("div", null, React.createElement("div", { className: "row" }, React.createElement("div", { className: "col-md-6" }, React.createElement(DatePicker, {
             ref: "departDate",
             hintText: "Depart Date",
             mode: "landscape" })), React.createElement("div", { className: "col-md-6" }, React.createElement(DatePicker, {
             ref: "returnDate",
             hintText: "Return Date",
-            mode: "landscape" })))), React.createElement("div", null, React.createElement("div", { onClick: this.handleClick }, React.createElement(FlatButton, { label: "See Flights!", secondary: true })), React.createElement("div", null, React.createElement("ul", { id: "flight-list", className: "list-unstyled" }, this.flightList()))));
+            mode: "landscape" })))), React.createElement("div", null, React.createElement("div", { onClick: this.handleClick }, React.createElement(FlatButton, { label: "See Flights!", secondary: true })), React.createElement("div", null, React.createElement("ul", { id: "flight-list", className: "list-unstyled" }, this.flightList()))), React.createElement(Paper, {
+            zDepth: 0,
+            className: "middle",
+            style: cardStyle }, React.createElement("ul", { className: "list-unstyled",
+            style: ulStyle }, this.getTextFields(textFields))), React.createElement("div", { className: "row", onClick: this.submit, style: marginTop }, React.createElement(FlatButton, { label: "Schedule Flights", secondary: true })), React.createElement(Paper, { className: "middle", style: marginTop }, this.getSubmission()));
     }
 });
 
@@ -321,7 +365,7 @@ module.exports = React.createClass({
 
     render: function render() {
         var divStyle = { width: "80%", margin: "0 auto", marginTop: "5%" };
-        return React.createElement("div", null, React.createElement(Header, null), React.createElement("div", { className: "container-fluid", style: divStyle }, React.createElement("div", { className: "row" }, React.createElement("div", { className: "col-md-12" }, React.createElement(FlightList, null), React.createElement(ContactForm, null), React.createElement(CardForm, null), React.createElement(SubmitButton, null)))));
+        return React.createElement("div", null, React.createElement(Header, null), React.createElement("div", { className: "container-fluid", style: divStyle }, React.createElement("div", { className: "row" }, React.createElement("div", { className: "col-md-12" }, React.createElement(FlightList, null)))));
     }
 });
 
